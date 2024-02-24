@@ -31,7 +31,7 @@ pipeline{
         stage('build'){
             steps{
                 sh """
-                ls -la
+                  ls -la
                 """
             }
         }
