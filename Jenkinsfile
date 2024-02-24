@@ -32,6 +32,8 @@ pipeline{
             steps{
                 sh """
                   ls -la
+                  zip -q -r catalogue.zip ./* -x ".git" -x "*.zip"
+                  ls -ltr
                 """
             }
         }
@@ -39,6 +41,7 @@ pipeline{
     post{
         always{
             echo "i will always say hello again"
+            deleteDir()
         }
         success{
             echo "i will always say hello when pipeline is success"
