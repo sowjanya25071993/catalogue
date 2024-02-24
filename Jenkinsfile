@@ -28,6 +28,13 @@ pipeline{
                 """
             }
         }
+        stage('build'){
+            steps{
+                sh """
+                ls -la
+                """
+            }
+        }
     }
     post{
         always{
