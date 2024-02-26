@@ -6,10 +6,12 @@ pipeline{
     }
     environment{
         PackageVersion=''
+        nexusURL='172.31.11.110:8081'
     }
     options{
         timeout(time: 1, unit: 'HOURS')
         disableConcurrentBuilds()
+        ansiColor('xterm')
     }
     stages{
         stage('get the version'){
@@ -35,6 +37,36 @@ pipeline{
                   zip -q -r catalogue.zip ./* -x ".git" -x "*.zip"
                   ls -ltr
                 """
+            }
+        }
+        stage('publish artifact'){
+            steps{
+              nexusArtifactUploader(
+                nexusVersion: 'nexus3',
+                protocol: 'http',
+                nexusUrl: '${nexusURL}',
+                groupId: 'com.roboshop',
+                version: "${packageversion}",
+                repository: 'catalogue',
+                credentialsId: 'nexus-auth',
+                artifacts: [
+                 [artifactId: 'catalogue',
+                  classifier: '',
+                  file: 'catalogue.zip',
+                  type: 'zip']
+                ]
+             )
+            }
+        }
+        stage('deploy'){
+            steps{
+                script{
+                    def params=[
+                        string(name:'version',value:"$packageversion"),
+                        string(name:'environment',value:"dev")
+                    ]
+                    build job: "catalogue_deploy", wait:true, parameters: params
+                }
             }
         }
     }
