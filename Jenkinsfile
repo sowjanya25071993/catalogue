@@ -62,8 +62,8 @@ pipeline{
             steps{
                 script{
                     def params=[
-                        string(name:'version',value:"$packageversion"),
-                        string(name:'environment',value:"dev")
+                        string(name:'version', value:"$packageVersion"),
+                        string(name:'environment', value:"dev")
                     ]
                     build job: "catalogue_deploy", wait:true, parameters: params
                 }
