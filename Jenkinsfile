@@ -46,7 +46,7 @@ pipeline{
                 protocol: 'http',
                 nexusUrl: '${nexusURL}',
                 groupId: 'com.roboshop',
-                version: "${packageversion}",
+                version: "${PackageVersion}",
                 repository: 'catalogue',
                 credentialsId: 'nexus-auth',
                 artifacts: [
@@ -62,7 +62,7 @@ pipeline{
             steps{
                 script{
                     def params=[
-                        string(name:'version', value:"$packageVersion"),
+                        string(name:'version', value:"$PackageVersion"),
                         string(name:'environment', value:"dev")
                     ]
                     build job: "catalogue_deploy", wait:true, parameters: params
