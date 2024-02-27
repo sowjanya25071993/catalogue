@@ -13,6 +13,9 @@ pipeline{
         disableConcurrentBuilds()
         ansiColor('xterm')
     }
+    parameters{
+        booleanParam(name:'deploy', defaultValue:false, description:'toggle this value')
+    }
     stages{
         stage('get the version'){
             steps{
@@ -27,6 +30,20 @@ pipeline{
             steps{
                 sh """
                   npm install
+                """
+            }
+        }
+        stage('uint tests'){
+            steps{
+                sh """
+                  echo "unit tests will run here"
+                """
+            }
+        }
+        stage('sonar scan'){
+            steps{
+                sh """
+                  sonar-scanner
                 """
             }
         }
@@ -59,6 +76,11 @@ pipeline{
             }
         }
         stage('deploy'){
+            when{
+                expression{
+                    params.Deploy=='true'
+                }
+            }
             steps{
                 script{
                     def params = [
